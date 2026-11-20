@@ -59,12 +59,11 @@ That opens a GUI dialog. Wait until `git --version` works, then continue. Homebr
 
 ### Clone
 
-The durable git URL is not settled yet. Replace the placeholder `<REPO_URL>` with the real URL before you run the clone. Leave the angle brackets in place only as a marker that you still need a URL. Do not invent a URL.
+The private Origin repo is `acelera-fab-o/joycon-family-games`. Run `origin auth login` once before cloning so Git's credential helper authenticates HTTPS and the clone URL stays free of tokens.
 
 ```bash
-git clone "<REPO_URL>"
-REPO_DIR="$(basename "${REPO_URL%.git}")"
-cd "$REPO_DIR"
+cd ~
+git clone https://origin.cursor.com/acelera-fab-o/joycon-family-games.git && cd joycon-family-games
 pwd
 test -f project.godot && echo "CLONE OK"
 rg '^config/name=' project.godot
@@ -72,8 +71,8 @@ rg '^config/name=' project.godot
 
 Expected:
 
-- `git clone` prints `Cloning into '<dir>'...` and exits 0.
-- `pwd` is the new clone, and the last path component matches `REPO_DIR`.
+- `git clone` prints `Cloning into 'joycon-family-games'...` and exits 0.
+- `pwd` ends in `/joycon-family-games`.
 - The test prints `CLONE OK`.
 - `rg` prints `config/name="Wiggle Party"`.
 
@@ -87,9 +86,8 @@ If it fails:
 
 | What you see | What to do |
 | --- | --- |
-| `REPO_URL: unbound variable`, or the remote is the literal string `<REPO_URL>` | You still have the placeholder. Get the real URL, then run the clone again. |
-| `fatal: repository not found` or `Authentication failed` | The URL or the credentials are wrong. `git clone` does not create the directory on failure. Fix the URL and clone again. Do not `cd` into a leftover folder from a different repo. |
-| Clone exits 0, then `CLONE OK` is missing | You are in the wrong directory. `ls` the clone. `cd` into the directory that contains `project.godot`. |
+| `Authentication failed`, `could not read Username`, or `repository not found` | This repo is private. Run `origin auth login` with an account that can read `acelera-fab-o/joycon-family-games`, then clone again. Do not put a token in the URL. |
+| Clone exits 0, then `CLONE OK` is missing | You are in the wrong directory. `cd joycon-family-games` from the directory where `git clone` ran (`~` if you used the command above). |
 | `config/name` is something else | This is a different project. Stop and clone the Wiggle Party URL. |
 
 Stay in this directory for every later command. `.godot/` appears after section 3 and is gitignored. Do not commit it.
@@ -131,10 +129,8 @@ xattr -dr com.apple.quarantine /Applications/Godot.app
 Then return to the clone:
 
 ```bash
-cd "$REPO_DIR"
+cd ~/joycon-family-games
 ```
-
-If `REPO_DIR` is no longer set, `cd` to the clone you created in section 1.
 
 Expected:
 
@@ -612,8 +608,8 @@ Run this after sections 1 through 5. Section 4 is required only when a pad is pa
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
-| `git clone` of `<REPO_URL>` fails | The placeholder was not replaced | Substitute the real URL, then clone again |
-| `project.godot` missing after clone | Shell is not in the clone directory | `cd` to the directory `git clone` created |
+| `git clone` of `joycon-family-games` asks for a password or returns 401/404 | HTTPS auth is missing for the private Origin repo | `origin auth login`, then clone `https://origin.cursor.com/acelera-fab-o/joycon-family-games.git` again with no token in the URL |
+| `project.godot` missing after clone | Shell is not in the clone directory | `cd joycon-family-games` |
 | SHA-256 of the zip does not match | Truncated download, or a different file | Delete the zip. Download the GitHub asset URL from section 2 and hash it again |
 | "Godot is damaged and can't be opened" | Quarantine attribute from `curl` | `xattr -dr com.apple.quarantine /Applications/Godot.app`, then `open /Applications/Godot.app` and confirm Open |
 | `--version` is not `4.7.2.stable.official.ed1daf0bf` | Homebrew moved, or an older app is first on the PATH | Call `/Applications/Godot.app/Contents/MacOS/Godot` directly. Reinstall from the zip if that binary is wrong |
