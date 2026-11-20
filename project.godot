@@ -1,0 +1,34 @@
+; Engine configuration file.
+; Godot 4.7.2, GL Compatibility so it runs on a Mac and on software OpenGL.
+
+config_version=5
+
+[application]
+
+config/name="Wiggle Party"
+config/description="Motion party games for a parent and a five-year-old."
+run/main_scene="res://scenes/main_menu.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+boot_splash/show_image=false
+boot_splash/bg_color=Color(0.286275, 0.721569, 1, 1)
+
+[autoload]
+
+MotionInput="*res://scripts/motion_input.gd"
+AudioFx="*res://scripts/audio_fx.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/resizable=true
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0.286275, 0.721569, 1, 1)
