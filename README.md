@@ -59,11 +59,9 @@ That opens a GUI dialog. Wait until `git --version` works, then continue. Homebr
 
 ### Clone
 
-The private Origin repo is `acelera-fab-o/joycon-family-games`. Run `origin auth login` once before cloning so Git's credential helper authenticates HTTPS and the clone URL stays free of tokens.
-
 ```bash
 cd ~
-git clone https://origin.cursor.com/acelera-fab-o/joycon-family-games.git && cd joycon-family-games
+git clone https://github.com/fbvilela/joycon-family-games.git && cd joycon-family-games
 pwd
 test -f project.godot && echo "CLONE OK"
 rg '^config/name=' project.godot
@@ -86,7 +84,7 @@ If it fails:
 
 | What you see | What to do |
 | --- | --- |
-| `Authentication failed`, `could not read Username`, or `repository not found` | This repo is private. Run `origin auth login` with an account that can read `acelera-fab-o/joycon-family-games`, then clone again. Do not put a token in the URL. |
+| `Authentication failed`, `could not read Username`, or `repository not found` | GitHub rejected the clone. Sign in with an account that can read `fbvilela/joycon-family-games`, then clone again. Do not put a token in the URL. |
 | Clone exits 0, then `CLONE OK` is missing | You are in the wrong directory. `cd joycon-family-games` from the directory where `git clone` ran (`~` if you used the command above). |
 | `config/name` is something else | This is a different project. Stop and clone the Wiggle Party URL. |
 
@@ -608,7 +606,7 @@ Run this after sections 1 through 5. Section 4 is required only when a pad is pa
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
-| `git clone` of `joycon-family-games` asks for a password or returns 401/404 | HTTPS auth is missing for the private Origin repo | `origin auth login`, then clone `https://origin.cursor.com/acelera-fab-o/joycon-family-games.git` again with no token in the URL |
+| `git clone` of `joycon-family-games` asks for a password or returns 401/404 | HTTPS auth is missing for the GitHub repo | Sign in to GitHub, then clone `https://github.com/fbvilela/joycon-family-games.git` again with no token in the URL |
 | `project.godot` missing after clone | Shell is not in the clone directory | `cd joycon-family-games` |
 | SHA-256 of the zip does not match | Truncated download, or a different file | Delete the zip. Download the GitHub asset URL from section 2 and hash it again |
 | "Godot is damaged and can't be opened" | Quarantine attribute from `curl` | `xattr -dr com.apple.quarantine /Applications/Godot.app`, then `open /Applications/Godot.app` and confirm Open |
